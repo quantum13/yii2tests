@@ -1,0 +1,9 @@
+<?php
+
+$config['components']['db'] = [
+    'class' => 'yii\db\Connection',
+    'dsn' => "mysql:host=localhost;dbname=yii2tests",
+    'username' => 'root',
+    'password' => '',
+    'enableSchemaCache' => defined('YII_DEBUG') && !YII_DEBUG,
+];

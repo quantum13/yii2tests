@@ -1,0 +1,8 @@
+vendor
+.idea
+
+runtime/*
+public/assets/*
+
+/config/web.local.php
+/config/console.local.php

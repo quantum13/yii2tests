@@ -6,3 +6,5 @@ public/assets/*
 
 /config/web.local.php
 /config/console.local.php
+tests/_output/*
+/tests/_support/_generated/*

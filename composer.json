@@ -17,6 +17,7 @@
         "quantum13/datetime2": "*"
     },
     "require-dev": {
+        "codeception/codeception": "*",
         "yiisoft/yii2-codeception": "*",
         "yiisoft/yii2-debug": "*",
         "yiisoft/yii2-gii": "*"

@@ -15,7 +15,7 @@ $config = [
     'aliases' => [
         '@site' => '@app/modules/site',
     ],
-    'layout' => false,
+    //'layout' => false,
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
@@ -54,6 +54,7 @@ $config = [
         'view' => [
             'class' => 'yii\web\View',
             'renderers' => [
+
                 'twig' => [
                     'class' => 'yii\twig\ViewRenderer',
                     'cachePath' => '@runtime/Twig/cache',
@@ -75,7 +76,7 @@ $config = [
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'enableStrictParsing' => true,
+            //'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [],
         ]

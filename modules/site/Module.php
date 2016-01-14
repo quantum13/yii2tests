@@ -8,6 +8,7 @@ use yii\base\BootstrapInterface;
 class Module extends \yii\base\Module implements BootstrapInterface
 {
     public $controllerNamespace = 'app\modules\site\controllers';
+    public $layout = false;
 
     /**
      * @param \yii\base\Application $app

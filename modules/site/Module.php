@@ -16,6 +16,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
     {
         $app->getUrlManager()->addRules([
             'GET /' => 'site/home/home',
+            'GET,POST login' => 'site/auth/login',
+            'GET logout' => 'site/auth/logout',
         ], true);
     }
 

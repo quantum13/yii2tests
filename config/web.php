@@ -35,8 +35,9 @@ $config = [
             'linkAssets' => YII_DEBUG ? false : true,
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\modules\site\models\User',
             'enableAutoLogin' => true,
+            'loginUrl' => ['site/auth/login']
         ],
         'errorHandler' => [
             'errorAction' => 'site/error/index',

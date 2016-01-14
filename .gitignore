@@ -8,3 +8,4 @@ public/assets/*
 /config/console.local.php
 tests/_output/*
 /tests/_support/_generated/*
+/codeception.yml

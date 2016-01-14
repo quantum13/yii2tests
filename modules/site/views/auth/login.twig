@@ -1,0 +1,21 @@
+{% extends '@site/views/layouts/base.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <h1>Log in</h1>
+
+    {{ use('app\modules\site\models\LoginForm') }}
+    {% set form = active_form_begin({
+    'id' : 'login-form',
+    'options' : {'class' : 'form-horizontal'},
+    }) %}
+    {{ form.field(model, 'username') | raw }}
+    {{ form.field(model, 'password').passwordInput() | raw }}
+
+    <div class="form-group">
+        <input type="submit" value="Login" class="btn btn-primary"/>
+    </div>
+    {{ active_form_end() }}
+
+{% endblock %}

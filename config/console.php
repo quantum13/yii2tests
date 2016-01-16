@@ -33,8 +33,8 @@ $config = [
     //'params' => require(__DIR__ . '/params.php')
 ];
 
-if (file_exists(__DIR__ . '/console.local.php')) {
-    require __DIR__ . '/console.local.php';
+if (file_exists(__DIR__ . '/config.local.php')) {
+    require __DIR__ . '/config.local.php';
 }
 
 return $config;

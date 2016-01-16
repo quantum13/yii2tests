@@ -7,8 +7,11 @@ use app\modules\books\models\BookSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\FileHelper;
+use yii\imagine\Image;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 /**
  * BooksController implements the CRUD actions for Book model.
@@ -42,6 +45,8 @@ class BooksController extends Controller
      */
     public function actionIndex()
     {
+        Yii::$app->user->returnUrl = Yii::$app->request->url;
+
         $searchModel = new BookSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -58,9 +63,17 @@ class BooksController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $model = $this->findModel($id);
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('view', [
+                'model' => $model,
+            ]);
+        } else {
+            return $this->render('view', [
+                'model' => $model,
+            ]);
+        }
+
     }
 
     /**
@@ -72,13 +85,14 @@ class BooksController extends Controller
     {
         $model = new Book();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($this->processSaving($model)) {
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+
     }
 
     /**
@@ -91,13 +105,59 @@ class BooksController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($this->processSaving($model)) {
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+
+    }
+
+    /**
+     * @param Book $model
+     * @return \yii\web\Response
+     * @throws \yii\base\Exception
+     */
+    protected function processSaving($model)
+    {
+        if (!$model->load(Yii::$app->request->post())) {
+            return false;
+        }
+
+        $file = UploadedFile::getInstance($model, 'preview');
+
+        if ($file && $file->tempName) {
+            $model->preview = $file;
+            $model->setScenario('upload');
+            $validated = $model->validate(['preview']);
+            $model->preview = '';
+            $model->setScenario('default');
+            if ($validated) {
+                $dir = Book::getPreviewDir();
+                $dirThumbs = Book::getPreviewThumpDir();
+                if (!file_exists($dir)) {
+                    FileHelper::createDirectory($dir);
+                }
+                if (!file_exists($dirThumbs)) {
+                    FileHelper::createDirectory($dirThumbs);
+                }
+                if (!$model->id && !$model->save()) {
+                    return false;
+                }
+                $fileName = $model->id . '.' . $file->extension;
+                $file->saveAs($dir . $fileName);
+                Image::thumbnail($dir . $fileName, 150, 150)->save($dirThumbs . $fileName);
+                $model->preview = $fileName;
+            } else {
+                return false;
+            }
+        }
+        if (!$model->save()) {
+            return false;
+        }
+        return true;
     }
 
     /**

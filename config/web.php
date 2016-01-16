@@ -2,6 +2,8 @@
 
 $config = [
     'id' => 'yii2tests',
+    'language' => 'ru-RU',
+    'timeZone' => 'Asia/Vladivostok',
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
         'log',
@@ -23,6 +25,10 @@ $config = [
             'username' => 'root',
             'password' => '',
             'enableSchemaCache' => defined('YII_DEBUG') && !YII_DEBUG,
+        ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'defaultTimeZone' => 'Asia/Vladivostok',
         ],
         'request' => [
             'cookieValidationKey' => 'dsfsdfsdfsdfsdfsdfsdfsdfsdf444$$$',
@@ -103,8 +109,8 @@ if (YII_ENV_DEV) {
     }
 }
 
-if (file_exists(__DIR__ . '/web.local.php')) {
-    require __DIR__ . '/web.local.php';
+if (file_exists(__DIR__ . '/config.local.php')) {
+    require __DIR__ . '/config.local.php';
 }
 
 return $config;

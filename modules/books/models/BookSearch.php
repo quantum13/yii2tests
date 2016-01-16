@@ -2,6 +2,7 @@
 
 namespace app\modules\books\models;
 
+use Quantum13\DateTime2;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -11,14 +12,16 @@ use yii\data\ActiveDataProvider;
  */
 class BookSearch extends Book
 {
+    public $date_from;
+    public $date_to;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'author_id'], 'integer'],
-            [['name', 'date_create', 'date_update', 'preview', 'date'], 'safe'],
+            [['author_id'], 'integer'],
+            [['name', 'date_from', 'date_to', 'author_id'], 'safe'],
         ];
     }
 
@@ -40,11 +43,16 @@ class BookSearch extends Book
      */
     public function search($params)
     {
-        $query = Book::find();
+        $query = Book::find()->joinWith('author');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['author'] = [
+            'asc' => ['books_authors.lastname' => SORT_ASC, 'books_authors.firstname' => SORT_ASC],
+            'desc' => ['books_authors.lastname' => SORT_DESC, 'books_authors.firstname' => SORT_DESC],
+        ];
 
         $this->load($params);
 
@@ -55,16 +63,23 @@ class BookSearch extends Book
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
-            'date_create' => $this->date_create,
-            'date_update' => $this->date_update,
-            'date' => $this->date,
             'author_id' => $this->author_id,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'preview', $this->preview]);
+            ->andFilterWhere(['>=', 'date', $this->dateFromSql])
+            ->andFilterWhere(['<=', 'date', $this->dateToSql]);
 
         return $dataProvider;
+    }
+
+    public function getDateFromSql()
+    {
+        return $this->date_from ? DateTime2::create($this->date_from)->toStringSql() : $this->date_from;
+    }
+
+    public function getDateToSql()
+    {
+        return $this->date_to ? DateTime2::create($this->date_to)->toStringSql() : $this->date_to;
     }
 }

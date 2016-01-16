@@ -36,10 +36,11 @@ class Book extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'preview'], 'required'],
-            [['date_create', 'date_update', 'date'], 'safe'],
-            [['author_id'], 'integer'],
-            [['name', 'preview'], 'string', 'max' => 255]
+            [['name', 'author_id'], 'required', 'on' => 'default'],
+            [['date_create', 'date_update', 'date'], 'safe', 'on' => 'default'],
+            [['author_id'], 'integer', 'on' => 'default'],
+            [['name', 'preview'], 'string', 'max' => 255, 'on' => 'default'],
+            [['preview'], 'image', 'checkExtensionByMimeType' => true, 'extensions' => 'png, jpg', 'on' => 'upload'],
         ];
     }
 
@@ -50,12 +51,12 @@ class Book extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'date_create' => 'Date Create',
-            'date_update' => 'Date Update',
-            'preview' => 'Preview',
-            'date' => 'Date',
-            'author_id' => 'Author ID',
+            'name' => 'Название',
+            'preview' => 'Картинка',
+            'date' => 'Дата выхода книги',
+            'author_id' => 'Автор',
+            'date_create' => 'Дата добавления',
+            'date_update' => 'Дата изменения',
         ];
     }
 
@@ -65,6 +66,17 @@ class Book extends \yii\db\ActiveRecord
     public function getAuthor()
     {
         return $this->hasOne(Author::className(), ['id' => 'author_id']);
+    }
+
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete()) {
+            unlink(self::getPreviewDir() . $this->preview);
+            unlink(self::getPreviewThumpDir() . $this->preview);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function behaviors()
@@ -79,5 +91,31 @@ class Book extends \yii\db\ActiveRecord
                 'value' => new Expression('NOW()'),
             ],
         ];
+    }
+
+    public function getPreviewUrl()
+    {
+        if (empty($this->preview)) {
+            return '/images/empty.jpg';
+        }
+        return '/uploads/images/books/' . $this->preview;
+    }
+
+    public function getPreviewThumbUrl()
+    {
+        if (empty($this->preview)) {
+            return '/images/empty-thumb.jpg';
+        }
+        return '/uploads/images/books-thumbs/' . $this->preview;
+    }
+
+    public static function getPreviewDir()
+    {
+        return Yii::getAlias('@app/public/uploads/images/books/');
+    }
+
+    public static function getPreviewThumpDir()
+    {
+        return Yii::getAlias('@app/public/uploads/images/books-thumbs/');
     }
 }

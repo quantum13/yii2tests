@@ -3,9 +3,10 @@ vendor
 
 runtime/*
 public/assets/*
+public/uploads/*
 
-/config/web.local.php
-/config/console.local.php
+/config/config.local.php
 tests/_output/*
 /tests/_support/_generated/*
 /codeception.yml
+

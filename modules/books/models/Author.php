@@ -53,4 +53,19 @@ class Author extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Book::className(), ['author_id' => 'id']);
     }
+
+    public function getFullname()
+    {
+        return $this->lastname . ($this->lastname ? ' ' : '') . $this->firstname;
+    }
+
+    public static function getForSelectbox()
+    {
+        return Author::find()
+            ->select(["concat(lastname, ' ', firstname)"])
+            ->indexBy('id')
+            ->orderBy('lastname, firstname')
+            ->asArray()
+            ->column();
+    }
 }

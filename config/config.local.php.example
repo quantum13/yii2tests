@@ -1,0 +1,27 @@
+<?php
+
+if (YII_ENV == 'prod') {
+    $config['components']['db'] = [
+        'class' => 'yii\db\Connection',
+        'dsn' => "mysql:host=localhost;dbname=yii2tests",
+        'username' => 'root',
+        'password' => '',
+        'enableSchemaCache' => true,
+    ];
+} elseif (YII_ENV == 'dev') {
+    $config['components']['db'] = [
+        'class' => 'yii\db\Connection',
+        'dsn' => "mysql:host=localhost;dbname=yii2tests",
+        'username' => 'root',
+        'password' => '',
+        'enableSchemaCache' => false,
+    ];
+} elseif (YII_ENV == 'test') {
+    $config['components']['db'] = [
+        'class' => 'yii\db\Connection',
+        'dsn' => "mysql:host=localhost;dbname=yii2tests_test",
+        'username' => 'root',
+        'password' => '',
+        'enableSchemaCache' => true,
+    ];
+}

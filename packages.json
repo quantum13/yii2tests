@@ -1,0 +1,15 @@
+{
+    "packages": {
+        "quantum13/yii2tests": {
+            "1.0": {
+                "name": "quantum13/yii2tests",
+                "version": "1.0",
+                "source": {
+                    "url": "https://github.com/quantum13/yii2tests.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
+        }
+    }
+}

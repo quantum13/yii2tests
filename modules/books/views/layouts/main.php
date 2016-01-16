@@ -1,7 +1,9 @@
 <?php
 use app\modules\site\assetbundles\SiteAsset;
 use yii\helpers\Html;
+use yii\web\YiiAsset;
 
+YiiAsset::register($this);
 SiteAsset::register($this);
 
 /* @var $this yii\web\View */

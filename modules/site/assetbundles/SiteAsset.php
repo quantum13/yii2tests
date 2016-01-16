@@ -15,6 +15,7 @@ class SiteAsset extends AssetBundle
     ];
     public $depends = [
         'yii\bootstrap\BootstrapPluginAsset',
+        'app\modules\site\assetbundles\LightboxAsset',
     ];
 
 }

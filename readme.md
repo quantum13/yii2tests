@@ -6,7 +6,7 @@
 * `yii migrate`
 * `/public` dir is doc root
 
-for tests
+for tests (some simple)
 * `yii-tests site/tools/db-cleanup`
 * `yii-tests migrate`
 * `vendor/bin/codecept run functional`

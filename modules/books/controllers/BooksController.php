@@ -106,7 +106,7 @@ class BooksController extends Controller
         $model = $this->findModel($id);
 
         if ($this->processSaving($model)) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->goBack();
         }
 
         return $this->render('update', [

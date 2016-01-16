@@ -38,7 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => ['image', ['width' => '150', 'height' => '150']],
             ],
             'date',
-            'author_id',
+            [
+                'attribute' => 'author_id',
+                'value' => (string)$model->author,
+            ],
         ],
     ]) ?>
 
